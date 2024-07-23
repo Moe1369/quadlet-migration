@@ -1,1 +1,21 @@
+[Unit]
+Description=Nginx Proxy Manager
+After=network.target
 
+[Container]
+AutoUpdate=registry
+Image=docker.io/jc21/nginx-proxy-manager:latest
+ContainerName=npm-app
+Network=npm.network
+PublishPort=80:80
+PublishPort=81:81
+PublishPort=443:443
+Volume=/var/home/administrator/volumen/nginx-proxy-manager/data:/data:rw,Z
+Volume=/var/home/administrator/volumen/nginx-proxy-manager/letsencrypt:/etc/letsencrypt:rw,Z
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target default.target

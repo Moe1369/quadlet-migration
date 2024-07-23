@@ -1,1 +1,18 @@
+[Unit]
+Description=Authentik Cache
+After=network.target
 
+[Container]
+AutoUpdate=registry
+Exec=--save 60 1 --loglevel warning
+Image=docker.io/library/redis:alpine
+ContainerName=at-cache
+Network=at.network
+Volume=/var/home/administrator/volumen/authentik/redis:/data:rw,Z
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target default.target

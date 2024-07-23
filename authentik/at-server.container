@@ -1,0 +1,30 @@
+[Unit]
+Description=Authentik Server
+After=network.target
+Requires=at-db.service at-cache.service
+
+[Container]
+AutoUpdate=registry
+ContainerName=at-server
+EnvironmentFile=.env
+Environment=AUTHENTIK_REDIS__HOST=at-cache
+Environment=AUTHENTIK_POSTGRESQL__HOST=at-db
+Environment=AUTHENTIK_POSTGRESQL__USER=$PG_USER
+Environment=AUTHENTIK_POSTGRESQL__NAME=$PG_DB
+Environment=AUTHENTIK_POSTGRESQL__PASSWORD=$PG_PASS
+Exec=server
+Image=ghcr.io/goauthentik/server:latest
+Network=at.network
+Network=npm.network
+PublishPort=9000:9000
+PublishPort=9443:9443
+User=root
+Volume=/var/home/administrator/volumen/authentik/media:/media:rw,Z
+Volume=/var/home/administrator/volumen/authentik/custom-templates:/templates:rw,Z
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target default.target
